@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div id="mapContainer2" style="width:1500px;height:800px;margin:0 auto;"></div>
+    <div id="mapContainer2" style="width:500px;height:500px;margin:0 auto;"></div>
 </div>
 </template>
 
@@ -71,7 +71,7 @@ function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, h
             if (u > Math.PI * 2.5) {
                 return Math.sin(u);
             }
-            return Math.sin(v) > 0 ? 1 * height : -1;
+            return Math.sin(v) > 0 ? 1 * height : -20;
         }
     };
 }
@@ -83,7 +83,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     let startValue = 0;
     let endValue = 0;
     let legendData = [];
-    let k = typeof internalDiameterRatio !== 'undefined' ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio) : 1 / 3;
+    let k = typeof internalDiameterRatio !== 'undefined' ? (1 - internalDiameterRatio) / (-3 + internalDiameterRatio) : 1 / 3;
 
     // 为每一个饼图数据，生成一个 series-surface 配置
     for (let i = 0; i < pieData.length; i++) {
@@ -101,7 +101,7 @@ function getPie3D(pieData, internalDiameterRatio) {
             pieStatus: {
                 selected: false,
                 hovered: false,
-                k: k
+                k: 5
             }
         };
 
@@ -161,14 +161,14 @@ function getPie3D(pieData, internalDiameterRatio) {
         },
         grid3D: {
             show: false,
-            boxHeight: 3,
+            boxHeight: 5,
             //top: '30%',
             bottom: '50%',
             environment: '#021041',
             viewControl: {
-                distance: 300,
-                alpha: 35,
-                beta: 100,
+                distance: 500,
+                alpha: 40,
+                beta: 30,
             },
 
         },
@@ -197,29 +197,29 @@ export default {
             let myChart = this.$echarts.init(document.querySelector('#mapContainer2'))
             // 传入数据生成option
             // 传入数据生成 option
-            let option = getPie3D([
+            let option = getPie3D([{
+                    name: '蔬果',
+                    value: 32.22,
+                    itemStyle: {
+                        opacity: 1,
+                        color: '#49A629',
+                    }
+                },
                 {
                     name: '稻米',
                     value: 47.01,
                     itemStyle: {
                         opacity: 1,
-                        color: 'rgba(209,126,23,1)',
+                        color: '#6FCCE5',
                     }
                 },
-                {
-                    name: '蔬果',
-                    value: 32.22,
-                    itemStyle: {
-                        opacity: 1,
-                        color: 'rgba(0,127,244,1)',
-                    }
-                },
+
                 {
                     name: '水产',
                     value: 14.33,
                     itemStyle: {
                         opacity: 1,
-                        color: 'rgba(50,90,244,1)',
+                        color: '#FAA819',
                     }
                 },
                 {
@@ -227,11 +227,48 @@ export default {
                     value: 6.44,
                     itemStyle: {
                         opacity: 1,
-                        color: 'rgba(50,90,244,1)',
+                        color: '#7441F4',
                     }
                 },
 
             ], 2);
+            option.series.push({
+                name: 'pie2d',
+                type: 'pie',
+                labelLine: {
+                    length: 50,
+                    length2: 50
+                },
+                startAngle: -20, //起始角度，支持范围[0, 360]。
+                clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
+                radius: ['10%', '30%'],
+                center: ['50%', '50%'],
+                data: [{
+                        name: '蔬果',
+                        value: 32.22,
+                    },
+                    {
+                        name: '稻米',
+                        value: 47.01,
+                        
+                    },
+
+                    {
+                        name: '水产',
+                        value: 14.33,
+                        
+                    },
+                    {
+                        name: '园艺',
+                        value: 6.44,
+                        
+                    },
+
+                ],
+                itemStyle: {
+                    opacity: 0
+                }
+            })
             myChart.setOption(option)
 
         }
